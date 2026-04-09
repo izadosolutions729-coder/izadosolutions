@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izado Solutions | Internal Complaints Portal</title>
+    <meta name="description" content="Secure internal platform for Izado Solutions employees.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/izado_logo.png">
+</head>
+<body class="dark-theme">
+    <div id="app">
+        <!-- Floating Blobs for Aesthetic Glow -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        
+        <!-- Auth Screen (Login) -->
+        <section id="login-screen" class="screen active">
+            <div class="glass-panel auth-card">
+                <div class="logo">
+                    <div class="logo-image-container">
+                        <img src="images/izado_logo.png" alt="Izado Logo" class="izado-logo">
+                    </div>
+                    <h1>Izado</h1>
+                </div>
+                <p class="subtitle">Secure Internal Complaints Portal</p>
+                <div class="company-location">Calicut, Kerala</div>
+                
+                <div id="auth-forms">
+                    <form id="login-form">
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <i data-lucide="user"></i>
+                                <input type="text" id="username" placeholder="Username" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <i data-lucide="lock"></i>
+                                <input type="password" id="password" placeholder="Password" required>
+                            </div>
+                        </div>
+                        <div class="auth-btn-group">
+                            <button type="submit" class="btn-primary">
+                                <span>Sign In</span>
+                                <i data-lucide="arrow-right"></i>
+                            </button>
+                            <button type="button" id="show-signup-btn" class="btn-secondary">
+                                <span>Sign Up</span>
+                            </button>
+                        </div>
+                        <button type="button" id="show-forgot-btn" class="btn-text" style="width: 100%; margin-top: 1.5rem; color: var(--gold); opacity: 0.9; font-size: 0.95rem;">Forgot Password?</button>
+                        <div id="login-error" class="error-msg"></div>
+                    </form>
+
+                    <!-- Forgot Password Sequence -->
+                    <div id="forgot-password-forms" style="display: none;">
+                        <!-- Step 1: Request OTP -->
+                        <form id="request-otp-form">
+                            <h3 style="color: var(--green-100); margin-bottom: 1.5rem;">Password Recovery</h3>
+                            <p class="text-muted" style="margin-bottom: 1.5rem; font-size: 0.9rem;">Enter your registered Email or Username to receive a reset OTP.</p>
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <i data-lucide="mail"></i>
+                                    <input type="text" id="forgot-identifier" placeholder="Email Address or Username" required>
+                                </div>
+                            </div>
+                            <div class="auth-btn-group" style="margin-top: 1.5rem;">
+                                <button type="submit" class="btn-primary">
+                                    <span>Send OTP</span>
+                                    <i data-lucide="send"></i>
+                                </button>
+                                <button type="button" class="btn-secondary back-to-login">
+                                    <span>Cancel</span>
+                                </button>
+                            </div>
+                            <div id="request-otp-error" class="error-msg"></div>
+                        </form>
+
+                        <!-- Step 2: Verify OTP -->
+                        <form id="verify-otp-form" style="display: none;">
+                            <h3 style="color: var(--green-100); margin-bottom: 1.5rem;">Verify OTP</h3>
+                            <p class="text-muted" style="margin-bottom: 0.5rem; font-size: 0.9rem;">Check your Gmail inbox for the OTP.</p>
+                            <p id="otp-timer-display" style="color: var(--accent); font-weight: bold; margin-bottom: 1.5rem; font-size: 0.9rem;">Expires in: 02:00</p>
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <i data-lucide="key-round"></i>
+                                    <input type="text" id="verify-otp-code" placeholder="6-digit OTP Code" required>
+                                </div>
+                            </div>
+                            <div class="auth-btn-group" style="margin-top: 1.5rem;">
+                                <button type="submit" class="btn-primary">
+                                    <span>Verify</span>
+                                    <i data-lucide="check-circle"></i>
+                                </button>
+                                <button type="button" class="btn-secondary back-to-login">
+                                    <span>Cancel</span>
+                                </button>
+                            </div>
+                            <div id="verify-otp-error" class="error-msg"></div>
+                        </form>
+
+                        <!-- Step 3: Create New Password -->
+                        <form id="create-password-form" style="display: none;">
+                            <h3 style="color: var(--green-100); margin-bottom: 1.5rem;">Create New Password</h3>
+                            <p class="text-muted" style="margin-bottom: 1.5rem; font-size: 0.9rem;">Please define your new secure password.</p>
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <i data-lucide="lock"></i>
+                                    <input type="password" id="reset-new-password" placeholder="New Password" required minlength="6">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <div class="input-wrapper">
+                                    <i data-lucide="lock"></i>
+                                    <input type="password" id="reset-confirm-password" placeholder="Confirm Password" required minlength="6">
+                                </div>
+                            </div>
+                            <div class="auth-btn-group" style="margin-top: 1.5rem;">
+                                <button type="submit" class="btn-primary">
+                                    <span>Save Password</span>
+                                    <i data-lucide="save"></i>
+                                </button>
+                                <button type="button" class="btn-secondary back-to-login">
+                                    <span>Cancel</span>
+                                </button>
+                            </div>
+                            <div id="create-password-error" class="error-msg"></div>
+                        </form>
+                    </div>
+
+                    <form id="signup-form" style="display: none;">
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <i data-lucide="user-plus"></i>
+                                <input type="text" id="reg-username" placeholder="New Username" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <i data-lucide="lock"></i>
+                                <input type="password" id="reg-password" placeholder="New Password" required minlength="6">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <i data-lucide="mail"></i>
+                                <input type="email" id="reg-email" placeholder="Email Address / Gmail" required>
+                            </div>
+                        </div>
+                        <div class="auth-btn-group">
+                            <button type="submit" class="btn-primary">
+                                <span>Register</span>
+                                <i data-lucide="user-check"></i>
+                            </button>
+                            <button type="button" id="show-login-btn" class="btn-secondary">
+                                <span>Cancel</span>
+                            </button>
+                        </div>
+                        <div id="signup-error" class="error-msg"></div>
+                    </form>
+                </div>
+                
+
+            </div>
+        </section>
+
+        <!-- Main Dashboard Screen -->
+        <section id="dashboard-screen" class="screen">
+            <!-- Top Navbar -->
+            <nav class="navbar">
+                <div class="nav-left">
+                    <span class="logo-small">
+                        <img src="images/izado_logo.png" alt="Izado" class="izado-logo-sm">
+                        Izado Solutions
+                    </span>
+                </div>
+                <div class="nav-right">
+                    <div class="server-status-pill" id="server-status-pill" style="display: none; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--green-300); margin-right: 2rem; background: rgba(0,0,0,0.3); padding: 0.4rem 0.8rem; border-radius: 99px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div id="status-dot" style="width: 6px; height: 6px; border-radius: 50%; background: #4ade80;"></div>
+                        <span id="status-text">Server: Online</span>
+                    </div>
+                    <div class="user-meta-header">
+                        <span id="user-display">Welcome, User</span>
+                        <div class="status-badge" id="user-role-badge">Employee</div>
+                    </div>
+                    <button id="logout-btn" class="btn-logout" title="Logout">
+                        <i data-lucide="log-out"></i>
+                    </button>
+                </div>
+            </nav>
+
+            <main class="dashboard-content">
+                <!-- Sidebar Navigation -->
+                <aside class="sidebar glass-panel">
+                    <div class="sidebar-nav">
+                        <button id="sidebar-complaints" class="nav-item active">
+                            <i data-lucide="layout-grid"></i>
+                            <span>Dashboard</span>
+                        </button>
+                        <button id="sidebar-submit" class="nav-item">
+                            <i data-lucide="plus-circle"></i>
+                            <span>New Complaint</span>
+                        </button>
+                        <button id="sidebar-employees" class="nav-item" style="display: none;">
+                            <i data-lucide="users"></i>
+                            <span>Manage Employees</span>
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Core Dynamic Panels -->
+                <section class="main-panel">
+                    
+                    <!-- View: All Complaints (Default) -->
+                    <div id="complaints-view" class="panel-content active">
+                        <header class="panel-header">
+                            <h2>Complaints History</h2>
+                            <div class="filters">
+                                <div class="premium-dropdown" id="filter-status-dropdown" style="width: 220px;">
+                                    <div class="premium-trigger">
+                                        <span id="filter-status-text">All Statuses</span>
+                                        <i data-lucide="chevron-down"></i>
+                                    </div>
+                                    <div class="premium-options" id="filter-status-options">
+                                        <div class="premium-option" data-value="">All Statuses</div>
+                                        <div class="premium-option" data-value="PENDING">Pending</div>
+                                        <div class="premium-option" data-value="IN_PROGRESS">In Progress</div>
+                                        <div class="premium-option" data-value="RESOLVED">Resolved</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="filter-status" value="">
+                            </div>
+                        </header>
+                        <div id="complaints-list" class="complaints-grid">
+                            <div class="loader">Loading complaints history...</div>
+                        </div>
+                    </div>
+
+                    <!-- View: Submit New Complaint -->
+                    <div id="submit-view" class="panel-content">
+                        <header class="panel-header">
+                            <h2>Submit New Complaint</h2>
+                        </header>
+                        <div class="glass-panel submission-card">
+                            <form id="submission-form" class="submission-form-grid">
+                                <div class="input-group">
+                                    <label>Complaint Title</label>
+                                    <input type="text" id="comp-title" placeholder="Briefly describe the issue..." required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label>Category</label>
+                                        <div class="premium-dropdown" id="comp-category-dropdown">
+                                            <div class="premium-trigger">
+                                                <span id="comp-category-text">Facility</span>
+                                                <i data-lucide="chevron-down"></i>
+                                            </div>
+                                            <div class="premium-options" id="comp-category-options">
+                                                <!-- Populated by JS -->
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="comp-category" required value="">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Priority</label>
+                                        <div class="priority-selector" id="priority-selector">
+                                            <div class="priority-btn active" data-value="LOW">Low</div>
+                                            <div class="priority-btn" data-value="MEDIUM">Medium</div>
+                                            <div class="priority-btn" data-value="HIGH">High</div>
+                                        </div>
+                                        <input type="hidden" id="comp-priority" value="LOW">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Detailed Description</label>
+                                    <textarea id="comp-description" rows="5" placeholder="Please provide as much information as possible..." required></textarea>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="comp-anonymous">
+                                    <label for="comp-anonymous">Submit as Anonymous (Identity will be hidden from managers)</label>
+                                </div>
+                                <button type="submit" class="btn-primary">
+                                    <span>Send Complaint</span>
+                                    <i data-lucide="send"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- View: Manage Employees -->
+                    <div id="employees-view" class="panel-content">
+                        <header class="panel-header">
+                            <h2>Manage Employees</h2>
+                        </header>
+                        <div class="glass-panel submission-card">
+                            <h3 style="color: var(--green-100); margin-bottom: 2rem;">Register Individual Employee</h3>
+                            <form id="add-employee-form" class="submission-form-grid" style="margin-bottom: 3rem;">
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <div class="input-wrapper">
+                                            <i data-lucide="user"></i>
+                                            <input type="text" id="emp-username" placeholder="Employee Username" required>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="input-wrapper">
+                                            <i data-lucide="lock"></i>
+                                            <input type="password" id="emp-password" placeholder="Temporary Password" required minlength="6">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group" style="margin-top: 1rem;">
+                                    <div class="input-wrapper">
+                                        <i data-lucide="mail"></i>
+                                        <input type="email" id="emp-email" placeholder="Employee Email (Optional)">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn-primary" style="margin-top: 1rem;">
+                                    <span>Create Employee Account</span>
+                                    <i data-lucide="user-plus"></i>
+                                </button>
+                            </form>
+
+                            <hr style="border-color: rgba(255,255,255,0.05); margin: 3rem 0;">
+
+                            <h3 style="color: var(--green-100); margin-bottom: 2rem;">Bulk Upload via Spreadsheet</h3>
+                            <form id="upload-employees-form" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                <div class="file-upload-wrapper" style="border: 2px dashed var(--green-600); padding: 3rem 2rem; border-radius: 14px; text-align: center; background: rgba(0,0,0,0.2);">
+                                    <i data-lucide="file-spreadsheet" style="width: 48px; height: 48px; color: var(--green-400); margin-bottom: 1rem;"></i>
+                                    <br>
+                                    <input type="file" id="emp-spreadsheet" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required style="max-width: 300px; margin: 0 auto;">
+                                    <p class="text-muted" style="margin-top: 1rem; font-size: 0.85rem;">Upload a CSV or Excel file containing "username" and "password" columns.</p>
+                                </div>
+                                <button type="submit" class="btn-secondary" style="width: 100%;">
+                                    <span>Upload & Process</span>
+                                    <i data-lucide="upload-cloud"></i>
+                                </button>
+                            </form>
+                            <div id="bulk-upload-report" style="margin-top: 2rem; display: none;">
+                                <h4 style="color: var(--green-200); margin-bottom: 1rem;">Process Results</h4>
+                                <div class="report-content" style="background: rgba(0,0,0,0.3); border-radius: 10px; padding: 1.5rem; font-size: 0.9rem;">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+
+                            <hr style="border-color: rgba(255,255,255,0.05); margin: 3rem 0;">
+
+                            <div class="registered-employees-section">
+                                <header class="panel-header" style="margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <h3 style="color: var(--green-100);">Already Registered Employees</h3>
+                                    <div class="filters">
+                                        <button class="btn-text" id="refresh-emp-btn" style="padding: 0.5rem 1rem;">
+                                            <i data-lucide="refresh-cw"></i> Refresh
+                                        </button>
+                                    </div>
+                                </header>
+                                <div id="employees-list" class="employees-grid">
+                                    <div class="loader">Querying Users Database...</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- View: Complaint Detail & Conversation -->
+                    <div id="detail-view" class="panel-content">
+                        <button id="back-to-list" class="btn-text">
+                            <i data-lucide="arrow-left"></i>
+                            Back to Dashboard
+                        </button>
+                        
+                        <div class="detail-container">
+                            <!-- Left: Complaint Body -->
+                            <div class="glass-panel detail-body-card">
+                                <header class="panel-header">
+                                    <h2 id="detail-title">Loading Detail...</h2>
+                                    <div id="detail-status-badge" class="badge">UNKNOWN</div>
+                                </header>
+                                <div id="detail-meta" class="detail-meta"></div>
+                                <div id="detail-body" class="description-text"></div>
+                                
+                                <!-- Admin Actions Section -->
+                                <div id="manager-actions" class="manager-controls" style="display: none;">
+                                    <h3>Administrative Resolution</h3>
+                                    <div class="action-buttons">
+                                        <button class="btn-status in-progress" onclick="updateStatus('IN_PROGRESS')">
+                                            <i data-lucide="refresh-cw" class="spin"></i> In Progress
+                                        </button>
+                                        <button class="btn-status resolve" onclick="updateStatus('RESOLVED')">
+                                            <i data-lucide="check-circle-2"></i> Resolve
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Message Thread -->
+                            <div class="responses-section glass-panel">
+                                <h3>Conversation Thread</h3>
+                                <div id="responses-list" class="responses-list"></div>
+                                <form id="response-form" class="response-input">
+                                    <textarea id="response-message" placeholder="Write a response or update..." required></textarea>
+                                    <button type="submit" class="btn-primary">
+                                        <span>Send</span>
+                                        <i data-lucide="message-square"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+            </main>
+        </section>
+
+        <!-- Toast Notifications Overlay -->
+        <div id="toast-container"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

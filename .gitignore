@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+vwen/
+env/
+.env
+
+# Django
+db.sqlite3
+media/
+static/
+
+# Frontend
+node_modules/
+.DS_Store
+
+# OS
+Thumbs.db
+Desktop.ini
