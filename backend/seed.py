@@ -17,13 +17,29 @@ categories = ['Facility', 'HR', 'IT Support', 'Security', 'Maintenance', 'Genera
 for cat_name in categories:
     Category.objects.get_or_create(name=cat_name)
 
-
-# Create Admin
+# Create Admin — bound to official Izado Gmail for OTP delivery
 if not User.objects.filter(username='admin').exists():
-    User.objects.create_superuser('admin', 'admin@example.com', 'admin123', role='ADMIN')
+    User.objects.create_superuser(
+        username='admin',
+        email='izadosolutions729@gmail.com',  # Real Gmail — OTP will be sent here
+        password='admin123',
+        role='ADMIN'
+    )
+else:
+    # Update existing admin email if it's still the placeholder
+    admin = User.objects.get(username='admin')
+    if admin.email == 'admin@example.com' or admin.email == '':
+        admin.email = 'izadosolutions729@gmail.com'
+        admin.save()
+        print("Updated admin email to izadosolutions729@gmail.com")
 
 # Create Employee
 if not User.objects.filter(username='employee1').exists():
-    User.objects.create_user('employee1', 'employee1@example.com', 'employee123', role='EMPLOYEE')
+    User.objects.create_user(
+        username='employee1',
+        email='employee1@example.com',
+        password='employee123',
+        role='EMPLOYEE'
+    )
 
 print("Seeding complete!")
