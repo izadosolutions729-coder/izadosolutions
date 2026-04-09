@@ -202,7 +202,7 @@ class RequestOTPView(APIView):
             import traceback
             error_str = str(e)
             print(f"[OTP ERROR] Delivery failed to {user.email}: {error_str}")
-            return DRFResponse({"error": f"Email delivery failed: {error_str}. Please contact support."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return DRFResponse({"error": f"Email delivery failed: {error_str}. Target: {user.email}. Please contact support."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class VerifyOTPView(APIView):
