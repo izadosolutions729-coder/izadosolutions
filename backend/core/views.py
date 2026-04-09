@@ -187,7 +187,15 @@ class RequestOTPView(APIView):
         
         from django.core.mail import send_mail
         from django.conf import settings
+        import socket
         
+        # Pre-flight check: can we even see the mail server?
+        try:
+            socket.create_connection((settings.EMAIL_HOST, settings.EMAIL_PORT), timeout=settings.EMAIL_TIMEOUT)
+            print(f"[NETWORK CHECK] Success: {settings.EMAIL_HOST}:{settings.EMAIL_PORT} is reachable.")
+        except Exception as net_err:
+             print(f"[NETWORK CHECK] Critical Error: Cannot reach {settings.EMAIL_HOST}:{settings.EMAIL_PORT}. Error: {net_err}")
+
         try:
             send_mail(
                 subject='[Izado Support] Your Security Code',
@@ -202,7 +210,7 @@ class RequestOTPView(APIView):
             import traceback
             error_str = str(e)
             print(f"[OTP ERROR] Delivery failed to {user.email}: {error_str}")
-            return DRFResponse({"error": f"Email delivery failed: {error_str}. Target: {user.email}. Please contact support."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return DRFResponse({"error": f"Email delivery failed: {error_str}. Target: {user.email}. Port: {settings.EMAIL_PORT}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class VerifyOTPView(APIView):
