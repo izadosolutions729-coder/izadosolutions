@@ -165,19 +165,19 @@ class RequestOTPView(APIView):
         
         try:
             send_mail(
-                'Izado Solutions - Password Reset OTP',
-                f'Your OTP for resetting your password is: {otp}\nIt is valid for strictly 2 minutes.',
-                settings.EMAIL_HOST_USER,
-                [user.email],
+                subject='Izado Solutions - Password Reset OTP',
+                message=f'Your OTP for resetting your password is: {otp}\nIt is valid for strictly 2 minutes.\n\n- Izado Solutions Pvt Ltd',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
                 fail_silently=False,
             )
+            return DRFResponse({"message": "OTP has been successfully sent to your email inbox."}, status=status.HTTP_200_OK)
         except Exception as e:
-            print(f"Email failure (Fallback Enabled): {e}")
-            print(f"--- FALLBACK OTP MOCK: {otp} ---")
-            # If SMTP crashes, we still return OK so the UI doesn't visually break for the user while testing.
-            return DRFResponse({"message": "OTP generated (Check terminal for fallback log)."}, status=status.HTTP_200_OK)
-        
-        return DRFResponse({"message": "OTP has been successfully sent to your email inbox."}, status=status.HTTP_200_OK)
+            import traceback
+            print(f"[EMAIL ERROR] Failed to send OTP to {user.email}: {e}")
+            print(traceback.format_exc())
+            return DRFResponse({"error": f"Email delivery failed: {str(e)}. Please verify your email address is correct or contact admin."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class VerifyOTPView(APIView):
     permission_classes = [permissions.AllowAny]
