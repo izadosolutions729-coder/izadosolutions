@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 # Create Categories
-categories = ['Facility', 'HR', 'IT Support', 'Security', 'Maintenance', 'General']
+categories = ['Facility', 'HR', 'IT Support', 'Security', 'Maintenance', 'Housekeeping', 'General']
 for cat_name in categories:
     Category.objects.get_or_create(name=cat_name)
 
