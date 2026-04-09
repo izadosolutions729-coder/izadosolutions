@@ -152,13 +152,19 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ALLOW_ALL_ORIGINS = True  # For MVP, allow all origins
+CORS_ALLOW_ALL_ORIGINS = True  # Keep for MVP
+CORS_ALLOWED_ORIGINS = [
+    "https://izadocomplaintsportal.vercel.app",
+    "http://localhost:3000",
+]
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000', 
     'http://127.0.0.1:3000', 
+    'https://izadocomplaintsportal.vercel.app', 
     'https://*.vercel.app', 
     'https://*.onrender.com'
 ]
+
 
 
 
