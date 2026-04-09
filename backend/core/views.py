@@ -175,7 +175,7 @@ class RequestOTPView(APIView):
         success_msg = "If this account exists and has a registered email, an OTP has been dispatched."
         
         if not user:
-            return DRFResponse({"message": success_msg}, status=status.HTTP_200_OK)
+            return DRFResponse({"error": f"Account '{email_or_user}' not found in the database. Please register first or use username 'admin'."}, status=status.HTTP_404_NOT_FOUND)
 
         if not user.email:
             return DRFResponse({"error": "This account does not have a registered email address. Please contact your Admin."}, status=status.HTTP_400_BAD_REQUEST)

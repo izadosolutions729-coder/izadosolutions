@@ -42,4 +42,14 @@ if not User.objects.filter(username='employee1').exists():
         role='EMPLOYEE'
     )
 
+# Create Test Account for Verification
+if not User.objects.filter(email='xdotxout@gmail.com').exists():
+    User.objects.create_user(
+        username='tester',
+        email='xdotxout@gmail.com',
+        password='password123',
+        role='EMPLOYEE'
+    )
+    print("Created test account: xdotxout@gmail.com")
+
 print("Seeding complete!")
