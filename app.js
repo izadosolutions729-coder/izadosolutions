@@ -15,9 +15,7 @@ const APP_STATE = {
 };
 
 // --- API CONFIGURATION ---
-// Local Dev: http://localhost:8000/api
-// Render Deployment: Update the URL below after your Render build finishes!
-const API_BASE = 'https://izadosolutions-backend.onrender.com/api'; 
+const API_BASE = 'https://izadosolutions.onrender.com/api'; 
 
 
 // --- API Utility Layer ---
