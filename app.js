@@ -14,7 +14,7 @@ const APP_STATE = {
     activeComplaint: null,
 };
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = '/api';
 
 // --- API Utility Layer ---
 const izadoApi = {
