@@ -1,0 +1,296 @@
+/* ============================================================
+   IZADO PREMIUM - MOBILE RESPONSIVE OVERRIDES
+   Makes mobile look and feel like a premium desktop app
+   ============================================================ */
+
+/* --- MOBILE: Body & App Container --- */
+@media (max-width: 768px) {
+    body {
+        padding: 0 !important;
+        height: 100dvh;
+        align-items: stretch;
+    }
+
+    #app {
+        border-radius: 0 !important;
+        height: 100dvh !important;
+        max-width: 100% !important;
+        border: none !important;
+    }
+
+    /* --- LOGIN PAGE --- */
+    #login-screen {
+        background: radial-gradient(circle at 30% 20%, #1a3a0a 0%, #050a03 60%);
+        padding: 1.5rem;
+    }
+
+    .auth-card {
+        padding: 2.5rem 2rem !important;
+        max-width: 100% !important;
+        border-radius: 28px !important;
+        background: linear-gradient(160deg, rgba(20, 50, 10, 0.85), rgba(5, 12, 3, 0.95)) !important;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.08) !important;
+    }
+
+    .logo-image-container {
+        width: 68px !important;
+        height: 68px !important;
+    }
+
+    .logo h1 {
+        font-size: 3rem !important;
+    }
+
+    .subtitle {
+        font-size: 0.75rem !important;
+    }
+
+    .company-location {
+        font-size: 0.7rem !important;
+        margin-bottom: 2rem !important;
+    }
+
+    .auth-btn-group {
+        gap: 0.75rem !important;
+    }
+
+    .auth-btn-group .btn-primary,
+    .auth-btn-group .btn-secondary {
+        padding: 1rem !important;
+        font-size: 0.95rem !important;
+        border-radius: 14px !important;
+    }
+
+    /* --- NAVBAR --- */
+    .navbar {
+        height: 64px !important;
+        padding: 0 1.25rem !important;
+    }
+
+    .logo-small {
+        font-size: 1.2rem !important;
+        gap: 0.5rem !important;
+    }
+
+    #user-display {
+        font-size: 0.8rem !important;
+    }
+
+    .status-badge {
+        font-size: 0.6rem !important;
+        padding: 0.2rem 0.6rem !important;
+    }
+
+    .btn-logout {
+        width: 36px !important;
+        height: 36px !important;
+        margin-left: 0.75rem !important;
+    }
+
+    /* Server status pill - hide on mobile to save space */
+    .server-status-pill, #server-status-pill {
+        display: none !important;
+    }
+
+    /* --- DASHBOARD LAYOUT --- */
+    .dashboard-content {
+        flex-direction: column !important;
+        height: calc(100dvh - 64px) !important;
+        overflow: hidden !important;
+    }
+
+    /* === SIDEBAR → BOTTOM NAVIGATION BAR === */
+    .sidebar {
+        width: 100% !important;
+        height: auto !important;
+        padding: 0 !important;
+        border-right: none !important;
+        border-top: 1px solid rgba(160, 234, 108, 0.15) !important;
+        background: rgba(8, 20, 4, 0.95) !important;
+        backdrop-filter: blur(30px) !important;
+        box-shadow: 0 -4px 30px rgba(0,0,0,0.6) !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 100 !important;
+        flex-shrink: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .sidebar-nav {
+        flex-direction: row !important;
+        gap: 0 !important;
+        width: 100% !important;
+        justify-content: space-around !important;
+    }
+
+    .nav-item {
+        flex: 1 !important;
+        flex-direction: column !important;
+        gap: 0.3rem !important;
+        padding: 0.85rem 0.5rem !important;
+        font-size: 0.65rem !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        border-radius: 0 !important;
+        border: none !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important;
+        color: var(--green-400) !important;
+        max-width: none !important;
+    }
+
+    .nav-item svg, .nav-item i {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .nav-item:hover {
+        transform: translateY(-2px) !important;
+        background: rgba(255,255,255,0.04) !important;
+    }
+
+    .nav-item.active {
+        background: transparent !important;
+        color: var(--green-300) !important;
+        border-bottom: 3px solid var(--primary) !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }
+
+    /* Main content area - account for bottom nav */
+    .main-panel {
+        flex: 1 !important;
+        padding: 1.5rem !important;
+        padding-bottom: 90px !important; /* Space for fixed bottom nav */
+        overflow-y: auto !important;
+    }
+
+    /* --- PANEL HEADERS --- */
+    .panel-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .panel-header h2 {
+        font-size: 1.6rem !important;
+    }
+
+    .filters {
+        width: 100% !important;
+    }
+
+    /* --- COMPLAINTS GRID --- */
+    .complaints-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .complaint-card {
+        padding: 1.25rem !important;
+    }
+
+    /* --- FORM ROW --- */
+    .form-row {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+
+    /* --- SUBMISSION CARD --- */
+    .submission-card {
+        padding: 1.5rem !important;
+        margin: 0 !important;
+        border-radius: 20px !important;
+    }
+
+    /* --- DETAIL VIEW --- */
+    .detail-container {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    .detail-body-card {
+        padding: 1.5rem !important;
+    }
+
+    .responses-section {
+        height: 400px !important;
+        padding: 1.5rem !important;
+    }
+
+    .action-buttons {
+        flex-direction: column !important;
+    }
+
+    .btn-status {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    /* --- EMPLOYEE CARDS --- */
+    .employee-card {
+        padding: 1rem 1.25rem !important;
+    }
+
+    /* --- TOAST NOTIFICATIONS --- */
+    #toast-container {
+        bottom: 90px !important;
+        right: 1rem !important;
+        left: 1rem !important;
+    }
+
+    .toast {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    /* --- INPUT SIZING --- */
+    input, select, textarea {
+        font-size: 16px !important; /* Prevents iOS zoom on focus */
+        padding: 1rem 1.5rem !important;
+    }
+
+    .input-wrapper i, .input-wrapper svg {
+        top: 1rem !important;
+    }
+
+    /* --- PRIORITY SELECTOR --- */
+    .priority-selector {
+        gap: 0.5rem !important;
+    }
+
+    .priority-btn {
+        padding: 0.7rem 0.5rem !important;
+        font-size: 0.85rem !important;
+    }
+
+    /* --- BACK BUTTON --- */
+    .btn-text {
+        font-size: 0.95rem !important;
+        margin-bottom: 1.25rem !important;
+    }
+
+    /* --- DROPDOWN --- */
+    .premium-options {
+        z-index: 999 !important;
+    }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+    .logo h1 {
+        font-size: 2.4rem !important;
+    }
+
+    .auth-card {
+        padding: 2rem 1.5rem !important;
+    }
+
+    .nav-item {
+        font-size: 0.6rem !important;
+        padding: 0.75rem 0.25rem !important;
+    }
+}
