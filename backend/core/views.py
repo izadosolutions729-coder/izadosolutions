@@ -137,6 +137,23 @@ class RegisterEmployeeView(APIView):
             return DRFResponse({"error": "Username already exists."}, status=status.HTTP_400_BAD_REQUEST)
 
         user = User.objects.create_user(username=username, password=password, email=email, role=role)
+        
+        # Send Welcome Email
+        if email:
+            from django.core.mail import send_mail
+            from django.conf import settings
+            try:
+                send_mail(
+                    subject='Welcome to Izado Solutions - Account Created',
+                    message=f'Hello {username},\n\nYour account has been created on the Izado Complaints Portal.\n\nUsername: {username}\nPortal: https://izadocomplaintsportal.vercel.app\n\nYou can now log in and submit your complaints securely.\n\n- Izado Solutions Pvt Ltd',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[email],
+                    fail_silently=True,
+                )
+                print(f"[SUCCESS] Welcome email sent to {email}")
+            except Exception as e:
+                print(f"[WELCOME EMAIL ERROR] Could not send to {email}: {e}")
+
         return DRFResponse({"message": "User registered successfully.", "id": user.id}, status=status.HTTP_201_CREATED)
 
 import random
@@ -149,11 +166,19 @@ class RequestOTPView(APIView):
     def post(self, request):
         email_or_user = request.data.get('email')
         if not email_or_user:
-            return DRFResponse({"error": "Email/Username is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return DRFResponse({"error": "Please enter your registered Email or Username."}, status=status.HTTP_400_BAD_REQUEST)
         
+        # Priority 1: Exact Email match, Priority 2: Username match
         user = User.objects.filter(email=email_or_user).first() or User.objects.filter(username=email_or_user).first()
+        
+        # Security: Always return success message even if user not found to prevent user enumeration
+        success_msg = "If this account exists and has a registered email, an OTP has been dispatched."
+        
         if not user:
-            return DRFResponse({"message": "If this account exists, an email has been sent."}, status=status.HTTP_200_OK) # generic success to prevent sniffing
+            return DRFResponse({"message": success_msg}, status=status.HTTP_200_OK)
+
+        if not user.email:
+            return DRFResponse({"error": "This account does not have a registered email address. Please contact your Admin."}, status=status.HTTP_400_BAD_REQUEST)
         
         otp = str(random.randint(100000, 999999))
         user.otp_code = otp
@@ -165,18 +190,18 @@ class RequestOTPView(APIView):
         
         try:
             send_mail(
-                subject='Izado Solutions - Password Reset OTP',
-                message=f'Your OTP for resetting your password is: {otp}\nIt is valid for strictly 2 minutes.\n\n- Izado Solutions Pvt Ltd',
+                subject='[Izado Support] Your Security Code',
+                message=f'Dear User,\n\nA password reset was requested for your Izado Solutions account.\n\nYour 6-digit Security Code is: {otp}\n\nThis code is valid for 5 minutes. If you did not request this, please ignore this email or contact security@izadosolutions.com for assistance.\n\nBest regards,\nIzado Solutions Team',
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[user.email],
                 fail_silently=False,
             )
-            return DRFResponse({"message": "OTP has been successfully sent to your email inbox."}, status=status.HTTP_200_OK)
+            print(f"[OTP SUCCESS] Dispatched code {otp} to registered email: {user.email}")
+            return DRFResponse({"message": "A security code has been sent to your registered email address."}, status=status.HTTP_200_OK)
         except Exception as e:
             import traceback
-            print(f"[EMAIL ERROR] Failed to send OTP to {user.email}: {e}")
-            print(traceback.format_exc())
-            return DRFResponse({"error": f"Email delivery failed: {str(e)}. Please verify your email address is correct or contact admin."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            print(f"[OTP ERROR] Delivery failed to {user.email}: {e}")
+            return DRFResponse({"error": f"Email delivery failed. Please contact support or try again later."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class VerifyOTPView(APIView):
@@ -190,7 +215,7 @@ class VerifyOTPView(APIView):
         user = User.objects.filter(email=email_or_user).first() or User.objects.filter(username=email_or_user).first()
         if not user or user.otp_code != str(otp):
             return DRFResponse({"error": "Invalid or expired OTP."}, status=status.HTTP_400_BAD_REQUEST)
-        if user.otp_created_at and (timezone.now() - user.otp_created_at) > datetime.timedelta(minutes=2):
+        if user.otp_created_at and (timezone.now() - user.otp_created_at) > datetime.timedelta(minutes=5):
             return DRFResponse({"error": "OTP has expired. Please request a new one."}, status=status.HTTP_400_BAD_REQUEST)
         return DRFResponse({"message": "OTP Verified Successfully."}, status=status.HTTP_200_OK)
 
@@ -209,7 +234,7 @@ class ResetPasswordOTPView(APIView):
         if not user or user.otp_code != str(otp):
             return DRFResponse({"error": "Invalid or expired OTP."}, status=status.HTTP_400_BAD_REQUEST)
             
-        if user.otp_created_at and (timezone.now() - user.otp_created_at) > datetime.timedelta(minutes=2):
+        if user.otp_created_at and (timezone.now() - user.otp_created_at) > datetime.timedelta(minutes=5):
             return DRFResponse({"error": "OTP has expired. Please request a new one."}, status=status.HTTP_400_BAD_REQUEST)
             
         user.set_password(new_password)
@@ -259,13 +284,25 @@ class BulkRegisterEmployeesView(APIView):
                 continue
 
             try:
-                User.objects.create_user(username=username, password=password, email=email, role=role)
+                user = User.objects.create_user(username=username, password=password, email=email, role=role)
                 success_count += 1
+                
+                # Send Welcome Email for Bulk Registration
+                if email:
+                    from django.core.mail import send_mail
+                    from django.conf import settings
+                    send_mail(
+                        subject='Welcome to Izado Solutions - Portal Access',
+                        message=f'Hello {username},\n\nYour account has been bulk registered on the Izado Complaints Portal.\n\nUsername: {username}\nPassword: {password}\nPortal: https://izadocomplaintsportal.vercel.app\n\nPlease log in and change your password for security.\n\n- Izado Solutions Pvt Ltd',
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[email],
+                        fail_silently=True,
+                    )
             except Exception as e:
                 failed_entries.append({"username": username, "reason": str(e)})
 
         return DRFResponse({
-            "message": f"Successfully registered {success_count} employees.",
+            "message": f"Successfully registered {success_count} employees. Welcome emails have been dispatched to valid addresses.",
             "success_count": success_count,
             "failed_entries": failed_entries
         }, status=status.HTTP_201_CREATED)
