@@ -2,20 +2,20 @@
     "version": 2,
     "builds": [
         {
-            "src": "backend/complaint_system/wsgi.py",
+            "src": "v_handler.py",
             "use": "@vercel/python",
-            "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
+            "config": { "runtime": "python3.12" }
         },
         {
             "src": "index.html",
             "use": "@vercel/static"
         },
         {
-            "src": "styles.css",
+            "src": "app.js",
             "use": "@vercel/static"
         },
         {
-            "src": "app.js",
+            "src": "styles.css",
             "use": "@vercel/static"
         },
         {
@@ -26,11 +26,11 @@
     "routes": [
         {
             "src": "/api/(.*)",
-            "dest": "backend/complaint_system/wsgi.py"
+            "dest": "v_handler.py"
         },
         {
             "src": "/admin/(.*)",
-            "dest": "backend/complaint_system/wsgi.py"
+            "dest": "v_handler.py"
         },
         {
             "src": "/(.*)",
