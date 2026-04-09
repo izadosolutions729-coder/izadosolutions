@@ -2,36 +2,11 @@
     "version": 2,
     "builds": [
         {
-            "src": "v_handler.py",
-            "use": "@vercel/python",
-            "config": { "runtime": "python3.12" }
-        },
-        {
             "src": "index.html",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "app.js",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "styles.css",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "images/**",
             "use": "@vercel/static"
         }
     ],
     "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "v_handler.py"
-        },
-        {
-            "src": "/admin/(.*)",
-            "dest": "v_handler.py"
-        },
         {
             "src": "/(.*)",
             "dest": "/$1"
