@@ -14,7 +14,11 @@ const APP_STATE = {
     activeComplaint: null,
 };
 
-const API_BASE = '/api';
+// --- API CONFIGURATION ---
+// Local Dev: http://localhost:8000/api
+// Render Deployment: Update the URL below after your Render build finishes!
+const API_BASE = 'https://izadosolutions-backend.onrender.com/api'; 
+
 
 // --- API Utility Layer ---
 const izadoApi = {

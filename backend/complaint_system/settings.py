@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-ram%wz0w47k&&g0u(jz3^asbe9nyb4h&c%h8!e%ey0!a1k219h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*'] # Allow all for Vercel deployment
+ALLOWED_HOSTS = ['*'] # Allow all for easy transition between Vercel and Render
+
 
 
 
@@ -152,7 +153,13 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True  # For MVP, allow all origins
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://*.vercel.app']
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000', 
+    'http://127.0.0.1:3000', 
+    'https://*.vercel.app', 
+    'https://*.onrender.com'
+]
+
 
 
 # --- Live Email Settings ---
